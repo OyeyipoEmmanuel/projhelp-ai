@@ -11,32 +11,37 @@ type AuthChangedContextType = {
 
 const AuthChangedContext = createContext<AuthChangedContextType | undefined>(undefined)
 
-export const AuthChangedProvider = ({ children } : {children: ReactNode})=>{
+export const AuthChangedProvider = ({ children }: { children: ReactNode }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [user, setUser] = useState<User | null>(null)
 
-    useEffect(()=>{
-        const unsub =  onAuthStateChanged((auth), async (currentUser)=>{
+    console.log(user)
+
+    useEffect(() => {
+        const unsub = onAuthStateChanged((auth), async (currentUser) => {
             setIsLoading(false)
-            if(!currentUser){
-               const newUser =  await signInAnonymously(auth)
-               setUser(newUser.user)
+            if (!currentUser) {
+                const newUser = await signInAnonymously(auth)
+                console.log(newUser)
+                setUser(newUser.user)
+            }else{
+                setUser(currentUser)
             }
 
-            setUser(user)
+            
         })
 
-        return ()=>unsub() //cleanup
+        return () => unsub() //cleanup
     }, [])
 
-    if (isLoading) return <LoadingComponent/>
-
-    return <AuthChangedContext.Provider value={{isLoading, user}}>
+    if (isLoading) return <LoadingComponent />
+    console.log(user)
+    return <AuthChangedContext.Provider value={{ isLoading, user }}>
         {children}
     </AuthChangedContext.Provider>
 }
 
-export const useGetAuthChanged = ()=>{
+export const useGetAuthChanged = () => {
     const context = useContext(AuthChangedContext)
 
     if (!context) throw new Error("useGetAuthChanged must be used within AuthChangedProvider");

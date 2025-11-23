@@ -1,14 +1,17 @@
 import { useNavigate } from "react-router-dom"
 import { useGetAuthChanged } from "../../context/AuthChangedContext"
+import { useEffect } from "react"
 
 const Chats = () => {
-    const {isLoading, user} = useGetAuthChanged()
-    const navigate = useNavigate()
+  const { isLoading, user } = useGetAuthChanged()
+  const navigate = useNavigate()
 
+  useEffect(() => {
     !isLoading && user === null && navigate("/")
+  }, [])
 
-    !isLoading && console.log(user);
-    
+  !isLoading && console.log(user);
+
   return (
     <div>Chats</div>
   )
