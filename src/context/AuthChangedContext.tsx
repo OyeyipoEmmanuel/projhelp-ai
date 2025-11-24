@@ -9,6 +9,7 @@ type AuthChangedContextType = {
     user: User | null;
 }
 
+
 const AuthChangedContext = createContext<AuthChangedContextType | undefined>(undefined)
 
 export const AuthChangedProvider = ({ children }: { children: ReactNode }) => {
