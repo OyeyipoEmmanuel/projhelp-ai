@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom"
 import LandingPg from "./pages/LandingPg/LandingPg"
 import Chats from "./pages/ChatPage/Chats"
+import { ai_model } from "./config/firebase-config"
 
 function App() {
   const routes = [
@@ -14,6 +15,7 @@ function App() {
       path: '/chat'
     },
   ]  
+
 
 
   return (
