@@ -11,7 +11,9 @@ const ChatInput = () => {
 
     const handleUserPrompt = async (e: FormEvent) => {
         e.preventDefault()
+        
         if (isSending) return
+
 
         isSending = true
 
@@ -60,7 +62,7 @@ const ChatInput = () => {
                 }}
             />
 
-            <button type="submit" disabled={!isSending} className="bg-[#5837F8] p-3 rounded-lg text-center hover:opacity-80 hover:transition-all hover:duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
+            <button type="submit" disabled={isSending || input.trim().length == 0} className="bg-[#5837F8] p-3 rounded-lg text-center hover:opacity-80 hover:transition-all hover:duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
                 <FiSend className="text-lg text-white" />
             </button>
         </form>
