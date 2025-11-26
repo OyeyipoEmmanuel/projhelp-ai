@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getAllMessages, type MessageType } from "../../api/chats/getMessages";
 import LoadingComponent from "../../components/Loading/LoadingComponent";
 import MessageBubble from "../../components/MessageBubble/MessageBubble";
+import { Timestamp } from "firebase/firestore";
+
 
 
 const ChatMessageArea = () => {
@@ -9,6 +11,19 @@ const ChatMessageArea = () => {
     const [messages, setMessages] = useState<MessageType[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [error, setError] = useState<Error | null>(null)
+
+    //ref to scroll to bottom on message entry
+    const bottomRef = useRef<HTMLDivElement | null>(null)
+
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" })
+    }, [messages])
+
+    //Last bot msg state
+    const [displayLastBotMsg, setDisplayLastBotMsg] = useState<string>("")
+
+    //Check if same message is returned from firebase
+    const lastAnimatedBotId = useRef<string | undefined>(undefined)
 
     useEffect(() => {
         setIsLoading(true)
@@ -29,15 +44,58 @@ const ChatMessageArea = () => {
 
     }, [])
 
-    !isLoading && console.log(messages);
+    // !isLoading && console.log(messages);
+
+    const latestBotMsg = messages.filter((message) => message.sender === "bot").at(-1)
+
+    useEffect(() => {
+        if (!latestBotMsg) return;
+
+        if (lastAnimatedBotId.current === latestBotMsg.id) return
+
+        lastAnimatedBotId.current = latestBotMsg.id
+
+        setDisplayLastBotMsg("")
+        let idx = 0
+
+        const interval = setInterval(() => {
+            setDisplayLastBotMsg(prev => prev + latestBotMsg.text[idx])
+            idx++;
+
+            if (idx >= latestBotMsg.text.length) clearInterval(interval)
+        }, 50);
+
+
+        return () => clearInterval(interval)
+    }, [latestBotMsg])
+
+    const messageIfEmpty = {
+        id: "0",
+        sender: "bot",
+        text: "Hello! I'm your AI project assistant. Tell me about your project idea, and I'll help you break it down with clear tasks and team assignments.",
+        createdAt: Timestamp.fromDate(new Date("November 24, 2025 at 12:36:21 AM UTC+1"))
+    }
 
 
 
     return (
-        <main className="flex flex-col space-y-5 max-h-[calc(90vh-120px)] overflow-y-auto">
+        <main className="flex flex-col space-y-5 max-h-[calc(90vh-120px)] overflow-y-auto md:w-[70%] md:mx-auto ">
             {error && <p>An err Occured</p>}
             {isLoading && <LoadingComponent />}
-            {!isLoading && !error && messages && messages.map((message, idx) =>(<MessageBubble message={message} idx={idx}/>))}
+            {messages.length === 0 && <MessageBubble message={messageIfEmpty} messageTxt={messageIfEmpty.text} idx={0}/>}
+            {!isLoading && !error && messages && messages.map((message, idx) => {
+                const isLatestBot = message === latestBotMsg
+                const txtToDisplay = isLatestBot ? displayLastBotMsg : message.text
+
+
+
+                return (
+                    <div>
+                        <MessageBubble message={isLatestBot ? latestBotMsg : message} messageTxt={txtToDisplay} idx={idx} />
+                        <div ref={bottomRef}></div>
+                    </div>
+                )
+            })}
         </main>
     )
 }
