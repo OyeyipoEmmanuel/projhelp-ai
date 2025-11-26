@@ -4,10 +4,11 @@ import { type MessageType } from '../../api/chats/getMessages'
 
 type MessageBubblePropsType = {
     message:MessageType;
+    messageTxt:string
     idx: number
 }
 
-const MessageBubble = ({message, idx} : MessageBubblePropsType) => {
+const MessageBubble = ({message,messageTxt, idx} : MessageBubblePropsType) => {
     //time to HH:MM
     const time = message.createdAt ? message.createdAt.toDate().toLocaleTimeString([], {
         hour: "2-digit",
@@ -22,7 +23,7 @@ const MessageBubble = ({message, idx} : MessageBubblePropsType) => {
             </div>
 
             <div className="w-[70%] flex flex-col space-y-1">
-                <div className={`w-full ${message.sender === "bot" ? "border-gray-200" : "py-3 bg-[#0F172B] text-white"} px-3 rounded-lg shadow-`}>{message.text}</div>
+                <p className={`w-full ${message.sender === "bot" ? "border-gray-200" : "py-3 bg-[#0F172B] text-white"} px-3 rounded-lg shadow-`}>{messageTxt}</p>
 
                 <span className={`text-black/50 text-xs ${message.sender === "user" && "place-self-end"}`}>
                     {time}
