@@ -1,16 +1,17 @@
 import { FaRobot } from 'react-icons/fa'
 import { RiUserLine } from 'react-icons/ri'
 import { type MessageType } from '../../api/chats/getMessages'
+import type { ReactNode } from 'react';
 
 type MessageBubblePropsType = {
     message:MessageType;
-    messageTxt:string
+    messageTxt:ReactNode
     idx: number
 }
 
 const MessageBubble = ({message,messageTxt, idx} : MessageBubblePropsType) => {
     //time to HH:MM
-    const time = message.createdAt ? message.createdAt.toDate().toLocaleTimeString([], {
+    const time = message.createdAt && message.createdAt ? message.createdAt.toDate().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit"
     }) : "00:00"
