@@ -3,6 +3,7 @@ import { getAllMessages, type MessageType } from "../../api/chats/getMessages";
 import LoadingComponent from "../../components/Loading/LoadingComponent";
 import MessageBubble from "../../components/MessageBubble/MessageBubble";
 import { Timestamp } from "firebase/firestore";
+import Typed from 'typed.js';
 
 
 
@@ -48,26 +49,29 @@ const ChatMessageArea = () => {
 
     const latestBotMsg = messages.filter((message) => message.sender === "bot").at(-1)
 
+    const typedRef = useRef(null);
+
     useEffect(() => {
         if (!latestBotMsg) return;
 
-        if (lastAnimatedBotId.current === latestBotMsg.id) return
+        if (lastAnimatedBotId.current === latestBotMsg.id) return;
 
-        lastAnimatedBotId.current = latestBotMsg.id
+        lastAnimatedBotId.current = latestBotMsg.id;
 
-        setDisplayLastBotMsg("")
-        let idx = 0
+        setDisplayLastBotMsg("");
+        
+        const fullText = latestBotMsg.text;
 
-        const interval = setInterval(() => {
-            setDisplayLastBotMsg(prev => prev + latestBotMsg.text[idx])
-            idx++;
+        const typed = new Typed(typedRef.current, {
+            strings: [fullText],
+            typeSpeed: 30,
+            showCursor: false,
+        });
 
-            if (idx >= latestBotMsg.text.length) clearInterval(interval)
-        }, 50);
-
-
-        return () => clearInterval(interval)
-    }, [latestBotMsg])
+        return ()=>{
+            typed.destroy()
+        };
+    }, [latestBotMsg?.id]);
 
     const messageIfEmpty = {
         id: "0",
@@ -82,16 +86,16 @@ const ChatMessageArea = () => {
         <main className="flex flex-col space-y-5 max-h-[calc(90vh-120px)] overflow-y-auto md:w-[70%] md:mx-auto ">
             {error && <p>An err Occured</p>}
             {isLoading && <LoadingComponent />}
-            {messages.length === 0 && <MessageBubble message={messageIfEmpty} messageTxt={messageIfEmpty.text} idx={0}/>}
+            {messages.length === 0 && <MessageBubble message={messageIfEmpty} messageTxt={messageIfEmpty.text} idx={0} />}
             {!isLoading && !error && messages && messages.map((message, idx) => {
                 const isLatestBot = message === latestBotMsg
-                const txtToDisplay = isLatestBot ? displayLastBotMsg : message.text
+                const txtToDisplay = isLatestBot ? <span ref={typedRef}></span> : message.text
 
 
 
                 return (
                     <div>
-                        <MessageBubble message={isLatestBot ? latestBotMsg : message} messageTxt={txtToDisplay} idx={idx} />
+                        <MessageBubble message={isLatestBot ? latestBotMsg : message}  messageTxt={txtToDisplay} idx={idx} />
                         <div ref={bottomRef}></div>
                     </div>
                 )
