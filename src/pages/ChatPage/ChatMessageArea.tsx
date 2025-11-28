@@ -49,29 +49,36 @@ const ChatMessageArea = () => {
 
     const latestBotMsg = messages.filter((message) => message.sender === "bot").at(-1)
 
-    const typedRef = useRef(null);
+    // const typedRef = useRef(null);
 
-    useEffect(() => {
-        if (!latestBotMsg) return;
+    // useEffect(() => {
+    //     if (!latestBotMsg) return;
+    //     if (lastAnimatedBotId.current === latestBotMsg.id) return;
 
-        if (lastAnimatedBotId.current === latestBotMsg.id) return;
+    //     lastAnimatedBotId.current = latestBotMsg.id;
 
-        lastAnimatedBotId.current = latestBotMsg.id;
+    //     const fullText = latestBotMsg.text;
+    //     console.log(fullText)
 
-        setDisplayLastBotMsg("");
-        
-        const fullText = latestBotMsg.text;
+    //     // Make sure the element is empty before Typed.js runs
+    //     // if (typedRef.current) {
+    //     //     typedRef.current.textContent = "";
+    //     // }
 
-        const typed = new Typed(typedRef.current, {
-            strings: [fullText],
-            typeSpeed: 30,
-            showCursor: false,
-        });
+    //     const typed = new Typed(typedRef.current, {
+    //         strings: [fullText],
+    //         typeSpeed: 30,
+    //         showCursor: false,
+    //         onComplete: () => {
+    //             // Optional: update state when done
+    //             setDisplayLastBotMsg(fullText);
+    //         }
+    //     });
 
-        return ()=>{
-            typed.destroy()
-        };
-    }, [latestBotMsg?.id]);
+    //     return () => {
+    //         typed.destroy();
+    //     };
+    // }, [latestBotMsg?.id]);
 
     const messageIfEmpty = {
         id: "0",
@@ -89,13 +96,15 @@ const ChatMessageArea = () => {
             {messages.length === 0 && <MessageBubble message={messageIfEmpty} messageTxt={messageIfEmpty.text} idx={0} />}
             {!isLoading && !error && messages && messages.map((message, idx) => {
                 const isLatestBot = message === latestBotMsg
-                const txtToDisplay = isLatestBot ? <span ref={typedRef}></span> : message.text
+                const txtToDisplay = message.text
+
+                // console.log(txtToDisplay)
 
 
 
                 return (
-                    <div>
-                        <MessageBubble message={isLatestBot ? latestBotMsg : message}  messageTxt={txtToDisplay} idx={idx} />
+                    <div key={message.id} className="space-y-6">
+                        <MessageBubble message={isLatestBot ? latestBotMsg : message} messageTxt={txtToDisplay} idx={idx} />
                         <div ref={bottomRef}></div>
                     </div>
                 )
