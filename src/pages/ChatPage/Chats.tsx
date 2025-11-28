@@ -33,7 +33,7 @@ const Chats = () => {
         <ChatMessageArea />
       </section>
 
-      <section className="max-h-[25vh] w-full border border-white/20 px-3 py-3">
+      <section className="max-h-[25vh] fixed bottom-0 w-full border border-white/20 px-3 py-3">
         <ChatInput />
       </section>
     </main>
