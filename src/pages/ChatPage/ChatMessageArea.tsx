@@ -3,7 +3,7 @@ import { getAllMessages, type MessageType } from "../../api/chats/getMessages";
 import LoadingComponent from "../../components/Loading/LoadingComponent";
 import MessageBubble from "../../components/MessageBubble/MessageBubble";
 import { Timestamp } from "firebase/firestore";
-import Typed from 'typed.js';
+
 
 
 
@@ -21,10 +21,10 @@ const ChatMessageArea = () => {
     }, [messages])
 
     //Last bot msg state
-    const [displayLastBotMsg, setDisplayLastBotMsg] = useState<string>("")
+    // const [displayLastBotMsg, setDisplayLastBotMsg] = useState<string>("")
 
     //Check if same message is returned from firebase
-    const lastAnimatedBotId = useRef<string | undefined>(undefined)
+    // const lastAnimatedBotId = useRef<string | undefined>(undefined)
 
     useEffect(() => {
         setIsLoading(true)
