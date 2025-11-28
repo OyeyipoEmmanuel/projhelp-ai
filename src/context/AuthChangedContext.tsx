@@ -16,7 +16,7 @@ export const AuthChangedProvider = ({ children }: { children: ReactNode }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [user, setUser] = useState<User | null>(null)
 
-    console.log(user)
+    // console.log(user)
 
     useEffect(() => {
         const unsub = onAuthStateChanged((auth), async (currentUser) => {
@@ -36,7 +36,7 @@ export const AuthChangedProvider = ({ children }: { children: ReactNode }) => {
     }, [])
 
     if (isLoading) return <LoadingComponent />
-    console.log(user)
+    // console.log(user)
     return <AuthChangedContext.Provider value={{ isLoading, user }}>
         {children}
     </AuthChangedContext.Provider>

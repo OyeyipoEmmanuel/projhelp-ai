@@ -23,7 +23,7 @@ const Chats = () => {
 
 
 
-  !isLoading && console.log(user);
+  // !isLoading && console.log(user);
 
   return (
     <main className="max-h-screen h-screen bg-[#F8FAFC] flex flex-col justify-between">
