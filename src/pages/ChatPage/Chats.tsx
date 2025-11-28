@@ -26,14 +26,14 @@ const Chats = () => {
   // !isLoading && console.log(user);
 
   return (
-    <main className="max-h-screen h-screen bg-[#F8FAFC] flex flex-col justify-between">
+    <main className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between overflow-hidden">
       {contextHolder}
 
       <section className="px-3 pt-12 max-h-[70vh]">
         <ChatMessageArea />
       </section>
 
-      <section className=" w-full border border-white/20 px-3 py-3">
+      <section className="max-h-[25vh] w-full border border-white/20 px-3 py-3">
         <ChatInput />
       </section>
     </main>
