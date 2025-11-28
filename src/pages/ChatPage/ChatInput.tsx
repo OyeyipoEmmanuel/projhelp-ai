@@ -51,7 +51,7 @@ const ChatInput = () => {
     return (
         <>
             {awaitingBotRes && <LoadingAiResponse />}
-            <form onSubmit={handleUserPrompt} className=" rounded-xl border border-[#5737f874] shadow-md flex flex-row items-center justify-between space-x-4 px-3">
+            <form onSubmit={handleUserPrompt} className=" rounded-xl border border-[#5737f874] shadow-md flex flex-row items-center justify-between space-x-4 px-3 md:w-[60%] md:mx-auto">
                 <textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
