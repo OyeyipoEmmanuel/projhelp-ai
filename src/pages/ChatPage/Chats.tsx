@@ -26,7 +26,7 @@ const Chats = () => {
   // !isLoading && console.log(user);
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between overflow-hidden">
+    <main className="max-h-screen bg-[#F8FAFC] flex flex-col justify-between overflow-hidden">
       {contextHolder}
 
       <section className="px-3 pt-12 max-h-[70vh]">
